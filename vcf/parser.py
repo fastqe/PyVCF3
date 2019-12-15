@@ -354,7 +354,7 @@ class Reader(object):
         self.samples = fields[9:]
         self._sample_indexes = dict([(x,i) for (i,x) in enumerate(self.samples)])
 
-    def _map(self, func, iterable, bad=['.', '']):
+    def _map(self, func, iterable, bad=['.', '', 'NA']):
         '''``map``, but make bad values None.'''
         return [func(x) if x not in bad else None
                 for x in iterable]
