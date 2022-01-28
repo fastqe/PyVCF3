@@ -29,7 +29,7 @@ if CYTHON:
     extras['ext_modules'] = [Extension("vcf.cparse", ["vcf/cparse.pyx"])]
 
 setup(
-    name='PyVCF',
+    name='PyVCF3',
     packages=['vcf', 'vcf.test'],
     scripts=['scripts/vcf_melt', 'scripts/vcf_filter.py',
              'scripts/vcf_sample_filter.py'],
@@ -49,7 +49,7 @@ setup(
             'snp-only = vcf.filters:SnpOnly',
         ]
     },
-    url='https://github.com/jamescasbon/PyVCF',
+    url='https://github.com/dridk/PyVCF3',
     version=VERSION,
     classifiers = [
         'Development Status :: 4 - Beta',
@@ -60,8 +60,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Cython',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
@@ -71,7 +69,6 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
       ],
     keywords='bioinformatics',
-    use_2to3=True,
     include_package_data=True,
     package_data = {
         '': ['*.vcf', '*.gz', '*.tbi'],
