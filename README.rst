@@ -1,10 +1,11 @@
-A VCFv4.0 and 4.1 parser for Python.
+PyVCF3
+-----------------
 
-## Note about the fork 
-Official PyVCF repository is no longer maintained and do not accept any pull request.
+(Official PyVCF)[https://pyvcf.readthedocs.io/en/latest/] repository is no longer maintained and do not accept any pull request.
 This fork is for python 3 only and has been published on pyPI as PyVCF3. 
 
 
+A VCFv4.0 and 4.1 parser for Python.
 Online version of PyVCF documentation is available at http://pyvcf.rtfd.org/
 
 The intent of this module is to mimic the ``csv`` module in the Python stdlib,
