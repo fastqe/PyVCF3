@@ -1,8 +1,7 @@
 PyVCF3
 -----------------
 
- `Official PyVCF <https://pyvcf.readthedocs.io/en/latest/>`_ repository is no longer maintained and do not accept any pull requests.
-This fork is for python 3 only and has been published on pyPI as PyVCF3. 
+ `Official PyVCF <https://pyvcf.readthedocs.io/en/latest/>`_ repository is no longer maintained and do not accept any pull requests. This fork is for python 3 only and has been published on pyPI as PyVCF3. 
 
 
 A VCFv4.0 and 4.1 parser for Python.
