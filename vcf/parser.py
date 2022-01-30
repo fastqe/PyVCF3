@@ -365,7 +365,7 @@ class Reader(object):
             self._reader = open(filename, "rb" if compressed else "rt")
         self.filename = filename
         self._total_bytes = get_uncompressed_size(self.filename)
-        self._read_bytes = None
+        self._read_bytes = 0
         if compressed:
             self._reader = gzip.GzipFile(fileobj=self._reader)
             if sys.version > "3":
