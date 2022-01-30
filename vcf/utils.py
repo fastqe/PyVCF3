@@ -1,6 +1,30 @@
 """
 Utilities for VCF files.
 """
+from .bgzf import BgzfBlocks
+import os
+def get_uncompressed_size(filepath):
+
+    if filepath is None:
+        return 0
+
+    device = open(filepath, "rb")
+    magic_4bytes = device.read()[:4]
+    #  IT IS A GZIP FILE
+    if magic_4bytes == b"\x1f\x8b\x08\x08":
+        device.seek(-4, 2)
+        return int.from_bytes(device.read(4), byteorder="little")
+
+    #  IT IS A BGZIP FILE
+    elif magic_4bytes == b"\x1f\x8b\x08\x04":
+        device.seek(0)
+        return sum([i[3] for i in BgzfBlocks(device)])
+
+    else:
+        device = open(filepath, "rb")
+        device.seek(0, os.SEEK_END)
+        return device.tell()
+
 
 def walk_together(*readers, **kwargs):
     """

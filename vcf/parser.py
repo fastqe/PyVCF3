@@ -6,6 +6,8 @@ import itertools
 import os
 import re
 import sys
+from .utils import get_uncompressed_size
+
 
 try:
     from collections import OrderedDict
@@ -284,6 +286,7 @@ class Reader(object):
                 compressed = filename.endswith('.gz')
             self._reader = open(filename, 'rb' if compressed else 'rt')
         self.filename = filename
+        self._total_bytes = get_uncompressed_size(self.filename)
         if compressed:
             self._reader = gzip.GzipFile(fileobj=self._reader)
             if sys.version > '3':
@@ -323,6 +326,14 @@ class Reader(object):
 
     def __iter__(self):
         return self
+
+    def read_bytes(self):
+        ''' Return read bytes from uncompress data. Usefull to have a progress bar'''
+        return self._reader.tell()
+
+    def total_bytes(self):
+        ''' Return total bytes from uncompress data. Usefull to have a progress bar'''
+        return self._total_bytes
 
     def _parse_metainfo(self):
         '''Parse the information stored in the metainfo of the VCF.
