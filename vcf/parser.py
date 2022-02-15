@@ -364,7 +364,7 @@ class Reader(object):
                 compressed = filename.endswith(".gz")
             self._reader = open(filename, "rb" if compressed else "rt")
         self.filename = filename
-        self._total_bytes = get_uncompressed_size(self.filename)
+        self._total_bytes = 0
         self._read_bytes = 0
         if compressed:
             self._reader = gzip.GzipFile(fileobj=self._reader)
@@ -413,6 +413,11 @@ class Reader(object):
 
     def total_bytes(self):
         """Return total bytes from uncompress data. Usefull to have a progress bar"""
+
+        if self._total_bytes == 0:
+            # Compute only once. It can be time consumming
+            self._total_bytes = get_uncompressed_size(self.filename)
+
         return self._total_bytes
 
     def _parse_metainfo(self):
