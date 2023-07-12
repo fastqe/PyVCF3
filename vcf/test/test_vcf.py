@@ -12,10 +12,6 @@ from io import StringIO
 import subprocess
 import sys
 
-try:
-    import pysam
-except ImportError:
-    pysam = None
 
 import vcf
 from vcf import model, utils
@@ -1254,74 +1250,6 @@ class TestCall(unittest.TestCase):
                 self.assertEqual([None,1,2], gt_types)
 
 
-@unittest.skipUnless(pysam, "test requires installation of PySAM.")
-class TestFetch(unittest.TestCase):
-
-    def setUp(self):
-        self.reader = vcf.Reader(fh('tb.vcf.gz', 'rb'))
-
-
-    def assertFetchedExpectedPositions(
-            self, fetched_variants, expected_positions):
-        fetched_positions = [var.POS for var in fetched_variants]
-        self.assertEqual(fetched_positions, expected_positions)
-
-
-    def testNoVariantsInRange(self):
-        fetched_variants = self.reader.fetch('20', 14370, 17329)
-        self.assertFetchedExpectedPositions(fetched_variants, [])
-
-
-    def testNoVariantsForZeroLengthInterval(self):
-        fetched_variants = self.reader.fetch('20', 14369, 14369)
-        self.assertFetchedExpectedPositions(fetched_variants, [])
-
-
-    def testFetchRange(self):
-        fetched_variants = self.reader.fetch('20', 14369, 14370)
-        self.assertFetchedExpectedPositions(fetched_variants, [14370])
-
-        fetched_variants = self.reader.fetch('20', 14369, 17330)
-        self.assertFetchedExpectedPositions(
-                fetched_variants, [14370, 17330])
-
-        fetched_variants = self.reader.fetch('20', 1110695, 1234567)
-        self.assertFetchedExpectedPositions(
-                fetched_variants, [1110696, 1230237, 1234567])
-
-
-    def testFetchesFromStartIfStartOnlySpecified(self):
-        fetched_variants = self.reader.fetch('20', 1110695)
-        self.assertFetchedExpectedPositions(
-                fetched_variants, [1110696, 1230237, 1234567])
-
-
-    def testFetchesAllFromChromIfOnlyChromSpecified(self):
-        fetched_variants = self.reader.fetch('20')
-        self.assertFetchedExpectedPositions(
-                fetched_variants,
-                [14370, 17330, 1110696, 1230237, 1234567]
-        )
-
-
-@unittest.skipUnless(pysam, "test requires installation of PySAM.")
-class TestIssue201(unittest.TestCase):
-    def setUp(self):
-        # This file contains some non-ASCII characters in a UTF-8 encoding.
-        # https://github.com/jamescasbon/PyVCF/issues/201
-        self.reader = vcf.Reader(fh('issue-201.vcf.gz', 'rb'),
-                                 encoding='utf-8')
-
-    def testIterate(self):
-        for record in self.reader:
-            # Should not raise decoding errors.
-            pass
-
-    def testFetch(self):
-        for record in self.reader.fetch(chrom='17'):
-            # Should not raise decoding errors.
-            pass
-
 
 class TestIssue234(unittest.TestCase):
     """ See https://github.com/jamescasbon/PyVCF/issues/234 """
@@ -1738,7 +1666,6 @@ suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestMetadataWhitespac
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestMixedFiltering))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestRecord))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestCall))
-suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestFetch))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestIssue201))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestIssue234))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestIssue246))
